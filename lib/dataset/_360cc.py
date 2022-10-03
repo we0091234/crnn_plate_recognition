@@ -3,6 +3,10 @@ import torch.utils.data as data
 import os
 import numpy as np
 import cv2
+import platform
+def cv_imread(path):   #读取中文路径的图片
+    img=cv2.imdecode(np.fromfile(path,dtype=np.uint8),-1)
+    return img
 
 class _360CC(data.Dataset):
     def __init__(self, config, is_train=True):
@@ -46,7 +50,8 @@ class _360CC(data.Dataset):
     def __getitem__(self, idx):
 
         img_name = list(self.labels[idx].keys())[0]
-        img = cv2.imread(os.path.join(self.root, img_name))
+        # img = cv2.imread(os.path.join(self.root, img_name))
+        img = cv_imread(os.path.join(self.root, img_name))
         # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
         img_h, img_w ,_= img.shape

@@ -12,6 +12,11 @@ def allFileList(rootfile,allFile):
             allFile.append(fileName)
         else:
             allFileList(fileName,allFile)
+def is_str_right(plate_name):
+    for str_ in plate_name:
+        if str_ not in palteStr:
+            return False
+    return True
 if __name__=="__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--image_path', type=str, default="/mnt/Gu/trainData/plate/new_git_train/CCPD_CRPD_OTHER_ALL", help='source') 
@@ -26,17 +31,19 @@ if __name__=="__main__":
     plateDict ={}
     for i in range(len(list(palteStr))):
         plateDict[palteStr[i]]=i
-    fp = open(labelFile,"w")
+    fp = open(labelFile,"w",encoding="utf-8")
     file =[]
     allFileList(rootPath,file)
     picNum = 0
     for jpgFile in file:
         print(jpgFile)
-        jpgName = jpgFile.split("/")[-1]
+        jpgName = jpgFile.split(os.sep)[-1]
         name =jpgName.split("_")[0]
         if " " in name:
             continue
         labelStr=" "
+        if not is_str_right(name):
+            continue
         strList = list(name)
         for  i in range(len(strList)):
             labelStr+=str(plateDict[strList[i]])+" "

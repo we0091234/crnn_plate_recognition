@@ -1,0 +1,63 @@
+GPUID: 0
+WORKERS: 8
+PRINT_FREQ: 100
+SAVE_FREQ: 2
+PIN_MEMORY: False
+OUTPUT_DIR: 'output'
+
+CUDNN:
+  BENCHMARK: True
+  DETERMINISTIC: False
+  ENABLED: True
+
+DATASET:
+  DATASET: 360CC
+  ROOT: ""
+  # CHAR_FILE: 'lib/dataset/txt/chars_5990.txt'
+  CHAR_FILE: 'lib/dataset/txt/plate2.txt'
+  JSON_FILE: {'train': 'datasets/train.txt', 'val': 'datasets/val.txt'}
+#  JSON_FILE: {'train': 'H:/DL-DATASET/360M/train.txt', 'val': 'H:/DL-DATASET/360M/test.txt'}
+  SCALE_FACTOR: 0.25
+  ROT_FACTOR: 30
+  STD: 0.193
+  MEAN: 0.588
+  ALPHABETS: ''
+
+TRAIN:
+  BATCH_SIZE_PER_GPU: 384
+  SHUFFLE: True
+  BEGIN_EPOCH: 0
+  END_EPOCH: 100
+  RESUME:
+    IS_RESUME: False
+    FILE: '/mnt/Gpan/Mydata/pytorchPorject/myCrnnPlate/output/360CC/crnn/2022-01-25-22-39/checkpoints/checkpoint_41_acc_0.8977.pth'
+  OPTIMIZER: 'adam'
+  LR: 0.001
+  WD: 0.0
+  LR_STEP: [60, 80]
+  # LR_STEP: [40,80,120,180]
+  LR_FACTOR: 0.1
+  MOMENTUM: 0.0
+  NESTEROV: False
+  RMSPROP_ALPHA:
+  RMSPROP_CENTERED:
+  FINETUNE:
+    IS_FINETUNE: False
+    FINETUNE_CHECKPOINIT: '/mnt/Gpan/Mydata/pytorchPorject/myCrnnPlate/output/360CC/crnn/2022-01-25-23-21/checkpoints/checkpoint_93_acc_0.9422.pth'
+    FREEZE: true
+
+TEST:
+  BATCH_SIZE_PER_GPU: 128
+  SHUFFLE: True  # for random test rather than test on the whole validation set
+  NUM_TEST: 1000
+  NUM_TEST_DISP: 10
+
+MODEL:
+  NAME: 'crnn'
+  IMAGE_SIZE:
+    OW: 280 # origial width: 280
+    H: 32
+    W: 100   # resized width: 160
+  NUM_CLASSES: 0
+  NUM_HIDDEN: 256
+

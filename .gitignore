@@ -28,3 +28,5 @@ redtest.py
 !*.npy
 !*.txt
 !*.md
+!*.yaml
+!*.png

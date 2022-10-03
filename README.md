@@ -14,7 +14,11 @@
 #### 车牌识别数据集CCPD+CRPD
 
 1. 从CCPD和CRPD截下来的车牌小图以及我自己收集的一部分车牌 [dataset](https://pan.baidu.com/s/1ufYbnZAZ1q0AlK7yZ08cvQ)
-2. 数据集打上标签
+2. 数据集打上标签,生成train.txt和val.txt
+   ![Image text](images/tmp8F4F.png)
+
+   图片命名如上图
+   然后执行如下命令，得到train.txt和val.txt
 
    ```
    python plateLabel.py --image_path your/train/img/path/ --label_file datasets/train.txt
