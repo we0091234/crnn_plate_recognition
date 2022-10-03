@@ -27,3 +27,4 @@ redtest.py
 !*.pt
 !*.npy
 !*.txt
+!*.md
