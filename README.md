@@ -56,7 +56,15 @@
 
 ```
 
+python my_demo_new.py --model_path saved_model/best.pth --image_path images/test.jpg
+                                   or your/model/path
 ```
+
+![Image text](images/test.jpg)
+
+结果是：
+
+![Image text](images/result.jpg)
 
 ## References
 
