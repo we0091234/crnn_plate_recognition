@@ -24,7 +24,7 @@ redtest.py
 !*.sh
 !*.npy
 !*.jpg
-!*.pt
+!*.pth
 !*.npy
 !*.txt
 !*.md
