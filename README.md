@@ -8,6 +8,7 @@
 2. **PyTorch > 1.2.0 (may fix ctc loss)**🔥
 3. yaml
 4. easydict
+5. tensorboardX
 
 ## 数据
 
