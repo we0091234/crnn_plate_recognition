@@ -14,7 +14,7 @@
 
 #### 车牌识别数据集CCPD+CRPD
 
-1. 从CCPD和CRPD截下来的车牌小图以及我自己收集的一部分车牌 [dataset](https://pan.baidu.com/s/19dQ5FdU2oCv-CGiP_hmsSQ)  提取码：41s9
+1. 从CCPD和CRPD截下来的车牌小图以及我自己收集的一部分车牌 [dataset](https://pan.baidu.com/s/1xT-F3E5U3ul3o6gu6Zk94g)  提取码：g08q
 2. 数据集打上标签,生成train.txt和val.txt
    ![Image text](images/tmp8F4F.png)
 

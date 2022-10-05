@@ -52,6 +52,8 @@ class _360CC(data.Dataset):
         img_name = list(self.labels[idx].keys())[0]
         # img = cv2.imread(os.path.join(self.root, img_name))
         img = cv_imread(os.path.join(self.root, img_name))
+        if img.shape[-1]==4:
+            img=cv2.cvtColor(img,cv2.COLOR_BGRA2BGR)
         # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
         img_h, img_w ,_= img.shape
