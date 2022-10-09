@@ -11,6 +11,9 @@ from easydict import EasyDict as edict
 import argparse
 import onnx
 from onnxsim import simplify
+def cv_imread(path):
+    img=cv2.imdecode(np.fromfile(path,dtype=np.uint8),-1)
+    return img
 
 plateName1=alphabets.plateName1
 def decodePlate(preds):
@@ -25,10 +28,10 @@ def parse_arg():
     parser = argparse.ArgumentParser(description="demo")
 
     parser.add_argument('--cfg', help='experiment configuration filename', type=str, default='lib/config/360CC_config.yaml')
-    parser.add_argument('--image_path', type=str, default='plate/沪KR9888_2.png', help='the path to your image')
-    parser.add_argument('--checkpoint', type=str, default='checkpoint_0_acc_0.9407.pth',
+    parser.add_argument('--image_path', type=str, default='images/test.jpg', help='the path to your image')
+    parser.add_argument('--checkpoint', type=str, default='/mnt/Gpan/Mydata/pytorchPorject/Chinese_license_plate_detection_recognition/plate_recognition/model/checkpoint_61_acc_0.9715.pth',
                         help='the path to your checkpoints')
-
+    
     args = parser.parse_args()
 
     with open(args.cfg, 'r') as f:
@@ -75,7 +78,7 @@ def recognition(config, img, model, converter, device):
 if __name__ == '__main__':
 
     config, args = parse_arg()
-    device = torch.device('cuda:1') if torch.cuda.is_available() else torch.device('cpu')
+    device = torch.device('cuda:0') if torch.cuda.is_available() else torch.device('cpu')
 
     model = crnn.get_crnn(config,export=True).to(device)
     print('loading pretrained model from {0}'.format(args.checkpoint))
@@ -87,7 +90,9 @@ if __name__ == '__main__':
     
     started = time.time()
 
-    img_raw = cv2.imread(args.image_path)
+    img_raw = cv_imread(args.image_path)
+    if img_raw.shape[-1]!=3:
+        img_raw=cv2.cvtColor(img_raw,cv2.COLOR_BGRA2BGR)
     # img = cv2.cvtColor(img_raw, cv2.COLOR_BGR2GRAY)
     converter = utils.strLabelConverter(config.DATASET.ALPHABETS)
 
