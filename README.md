@@ -71,6 +71,13 @@ python my_demo_new.py --model_path saved_model/best.pth --image_path images/test
 
 ![Image text](images/result.jpg)
 
+## 导出onnx
+```
+
+python exportonnx.py --image_path images/test.jpg  --checkpoint saved_model/best.pth
+
+```
+导出onnx文件为 saved_model/best.onnx
 ## References
 
 - https://github.com/meijieru/crnn.pytorch
