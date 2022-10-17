@@ -78,6 +78,23 @@ python exportonnx.py --image_path images/test.jpg  --checkpoint saved_model/best
 
 ```
 导出onnx文件为 saved_model/best.onnx
+## 双层车牌
+双层车牌这里采用拼接成单层车牌的方式：
+```
+def get_split_merge(img):
+    h,w,c = img.shape
+    img_upper = img[0:int(5/12*h),:]
+    img_lower = img[int(1/3*h):,:]
+    img_upper = cv2.resize(img_upper,(img_lower.shape[1],img_lower.shape[0]))
+    new_img = np.hstack((img_upper,img_lower))
+    return new_img
+```
+
+![Image text](image/tmp55DE.png)  通过变换得到 ![Image text](image/new.jpg)
+
+
+
+
 ## References
 
 - https://github.com/meijieru/crnn.pytorch
