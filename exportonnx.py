@@ -1,4 +1,5 @@
 import numpy as np
+from plateNet import myNet_ocr
 import time
 import cv2
 import torch
@@ -70,7 +71,7 @@ def recognition(config, img, model, converter, device):
     newPreds=decodePlate(preds)
     plate=""
     for i in newPreds:
-        plate+=plateName1[i]
+        plate+=plateName1[int(i)]
     print(plate)
     return img
 
@@ -80,7 +81,8 @@ if __name__ == '__main__':
     config, args = parse_arg()
     device = torch.device('cuda:0') if torch.cuda.is_available() else torch.device('cpu')
 
-    model = crnn.get_crnn(config,export=True).to(device)
+    # model = crnn.get_crnn(config,export=True).to(device)
+    model = myNet_ocr(num_classes=78,export=True).to(device)
     print('loading pretrained model from {0}'.format(args.checkpoint))
     checkpoint = torch.load(args.checkpoint)
     if 'state_dict' in checkpoint.keys():
@@ -106,7 +108,7 @@ if __name__ == '__main__':
 
     input_shapes = {"images": list(in_im.shape)}
     onnx_model = onnx.load(onnx_f)
-    model_simp, check = simplify(onnx_model,input_shapes=input_shapes)
+    model_simp, check = simplify(onnx_model,test_input_shapes=input_shapes)
     onnx.save(model_simp, onnx_f)
 
 

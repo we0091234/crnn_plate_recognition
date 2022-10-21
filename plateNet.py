@@ -48,7 +48,8 @@ class myNet_ocr(nn.Module):
             conv = x.squeeze(2) # b *512 * width
             conv = conv.transpose(2,1)  # [w, b, c]
             conv =conv.argmax(dim=2)
-            return conv
+            out = conv.float()
+            return out
         else:
             b, c, h, w = x.size()
             assert h == 1, "the height of conv must be 1"
@@ -56,12 +57,13 @@ class myNet_ocr(nn.Module):
             conv = conv.permute(2, 0, 1)  # [w, b, c]
             # output = F.log_softmax(self.rnn(conv), dim=2)
             output = torch.softmax(conv, dim=2)
+           
             return output
 
 if __name__ == '__main__':
     x = torch.randn(1,3,48,168)
     cfg =[32,'M',64,'M',128,'M',256]
     model = myNet_ocr(num_classes=78,export=True,cfg=cfg)
-    print(model)
-    # out = model(x)
-    # print(out.shape)
+    # print(model)
+    out = model(x)
+    print(out.shape)

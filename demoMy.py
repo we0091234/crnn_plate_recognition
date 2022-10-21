@@ -25,6 +25,7 @@ def parse_arg():
     parser.add_argument('--image_path', type=str, default='/mnt/Gpan/Mydata/pytorchPorject/myCrnnPlate/01.jpg', help='the path to your image')
     parser.add_argument('--checkpoint', type=str, default='/mnt/Gpan/Mydata/pytorchPorject/myCrnnPlate/output/360CC/crnn/2022-09-27-20-24/checkpoints/checkpoint_61_acc_0.9715.pth',
                         help='the path to your checkpoints')
+    # parser.add_argument('--checkpoint', type=str, default='saved_model/best.pth',help='the path to your checkpoints')
 
     args = parser.parse_args()
 
@@ -87,7 +88,7 @@ def recognition(config, img, model, converter, device):
     
 
 if __name__ == '__main__':
-    testPath = r"/mnt/Gu/trainData/plate/new_git_train/val/double_split_merge/"
+    testPath = r"/mnt/Gu/trainData/plate/new_git_train/val/"
     config, args = parse_arg()
     device = torch.device('cuda:0') if torch.cuda.is_available() else torch.device('cpu')
     # device =torch.device('cpu')

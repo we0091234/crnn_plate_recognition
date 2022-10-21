@@ -89,11 +89,11 @@ def weights_init(m):
         m.weight.data.normal_(1.0, 0.02)
         m.bias.data.fill_(0)
 
-def get_crnn(config,export=False,cfg=None):
+def get_crnn(config,export=False,cfg=None,num_class=78):
 
     # model = CRNN(config.MODEL.IMAGE_SIZE.H, 3, config.MODEL.NUM_CLASSES + 1, config.MODEL.NUM_HIDDEN)
     # model = caffeNetOcr(num_classes=78,export=export)
-    model = myNet(num_classes=78,export=export,cfg=cfg)
+    model = myNet(num_classes=num_class,export=export,cfg=cfg)
     # model.apply(weights_init)
 
     return model

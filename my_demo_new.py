@@ -53,7 +53,7 @@ def get_plate_result(img,device,model):
     newPreds=decodePlate(preds)
     plate=""
     for i in newPreds:
-        plate+=plateName[i]
+        plate+=plateName[int(i)]
     return plate
 
 def init_model(device,model_path):
@@ -68,8 +68,8 @@ def init_model(device,model_path):
     
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model_path', type=str, default='output/360CC/crnn/2022-09-26-21-30/checkpoints/checkpoint_11_acc_0.9657.pth', help='model.pt path(s)')  
-    parser.add_argument('--image_path', type=str, default='images', help='source') 
+    parser.add_argument('--model_path', type=str, default='saved_model/best.pth', help='model.pt path(s)')  
+    parser.add_argument('--image_path', type=str, default='images/test.jpg', help='source') 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # device =torch.device("cpu")
     opt = parser.parse_args()
