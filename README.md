@@ -16,9 +16,9 @@
 
 1. 从CCPD和CRPD截下来的车牌小图以及我自己收集的一部分车牌 [dataset](https://pan.baidu.com/s/1xT-F3E5U3ul3o6gu6Zk94g)  提取码：g08q
 2. 数据集打上标签,生成train.txt和val.txt
-   ![Image text](images/tmp8F4F.png)
+   ![Image text](images/tmp2E.png)
 
-   图片命名如上图
+   图片命名如上图：**车牌号_序号.jpg**
    然后执行如下命令，得到train.txt和val.txt
 
    ```
@@ -61,7 +61,7 @@
 
 ```
 
-python my_demo_new.py --model_path saved_model/best.pth --image_path images/test.jpg
+python demo.py --model_path saved_model/best.pth --image_path images/test.jpg
                                    or your/model/path
 ```
 
@@ -72,14 +72,25 @@ python my_demo_new.py --model_path saved_model/best.pth --image_path images/test
 ![Image text](images/result.jpg)
 
 ## 导出onnx
-```
-
-python exportonnx.py --image_path images/test.jpg  --checkpoint saved_model/best.pth
 
 ```
+
+python export.py --weights saved_model/best.pth --save_path saved_model/best.onnx  --simplify
+
+```
+
 导出onnx文件为 saved_model/best.onnx
+
+#### onnx 推理
+
+```
+python onnx_infer.py --onnx_file saved_model/best.onnx  --image_path images/test.jpg
+```
+
 ## 双层车牌
+
 双层车牌这里采用拼接成单层车牌的方式：
+
 ```
 def get_split_merge(img):
     h,w,c = img.shape
@@ -92,8 +103,11 @@ def get_split_merge(img):
 
 ![Image text](image/tmp55DE.png)  通过变换得到 ![Image text](image/new.jpg)
 
+## 训练自己的数据集
 
-
+1. 修改alphabets.py，修改成你自己的字符集，plateName,plate_chr都要修改，plate_chr 多了一个空的占位符'#'
+2. 通过plateLabel.py 生成train.txt, val.txt
+3. 训练
 
 ## References
 

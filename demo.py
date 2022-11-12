@@ -1,94 +1,129 @@
-import numpy as np
-import time
-import cv2
+from plateNet import myNet_ocr
 import torch
-from torch.autograd import Variable
-import lib.utils.utils as utils
-import lib.models.crnn as crnn
-import lib.config.alphabets as alphabets
-import yaml
-from easydict import EasyDict as edict
+import torch.nn as nn
+import cv2
+import numpy as np
+import os
+import time
 import argparse
- 
-def parse_arg():
-    parser = argparse.ArgumentParser(description="demo")
+from alphabets import plate_chr
+from LPRNet import build_lprnet
+def cv_imread(path):   #读取中文路径的图片
+    img=cv2.imdecode(np.fromfile(path,dtype=np.uint8),-1)
+    return img
 
-    parser.add_argument('--cfg', help='experiment configuration filename', type=str, default='lib/config/360CC_config.yaml')
-    parser.add_argument('--image_path', type=str, default='/mnt/Gpan/Mydata/pytorchPorject/myCrnnPlate/新AU3006_convert0177.jpg', help='the path to your image')
-    parser.add_argument('--checkpoint', type=str, default='/mnt/Gpan/Mydata/pytorchPorject/myCrnnPlate/output/360CC/crnn/2022-01-25-22-39/checkpoints/checkpoint_7_acc_0.8618.pth',
-                        help='the path to your checkpoints')
+def allFilePath(rootPath,allFIleList):
+    fileList = os.listdir(rootPath)
+    for temp in fileList:
+        if os.path.isfile(os.path.join(rootPath,temp)):
+            allFIleList.append(os.path.join(rootPath,temp))
+        else:
+            allFilePath(os.path.join(rootPath,temp),allFIleList)
+            
+mean_value,std_value=(0.588,0.193)
+def decodePlate(preds):
+    pre=0
+    newPreds=[]
+    for i in range(len(preds)):
+        if preds[i]!=0 and preds[i]!=pre:
+            newPreds.append(preds[i])
+        pre=preds[i]
+    return newPreds
 
-    args = parser.parse_args()
-
-    with open(args.cfg, 'r') as f:
-        config = yaml.load(f)
-        config = edict(config)
-
-    config.DATASET.ALPHABETS = alphabets.plateName
-    config.MODEL.NUM_CLASSES = len(config.DATASET.ALPHABETS)
-
-    return config, args
-
-def recognition(config, img, model, converter, device):
-
-    # github issues: https://github.com/Sierkinhane/CRNN_Chinese_Characters_Rec/issues/211
-    # h, w = img.shape
-    # fisrt step: resize the height and width of image to (32, x)
-    # img = cv2.resize(img, (0, 0), fx=config.MODEL.IMAGE_SIZE.H / h, fy=48config.MODEL.IMAGE_SIZE.H / h, interpolation=cv2.INTER_CUBIC)
-
-    # # second step: keep the ratio of image's text same with training
-    # h, w = img.shape
-    # w_cur = int(img.shape[1] / (config.MODEL.IMAGE_SIZE.OW / config.MODEL.IMAGE_SIZE.W))
-    # img = cv2.resize(img, (0, 0), fx=w_cur / w, fy=1.0, interpolation=cv2.INTER_CUBIC)
-    # img = np.reshape(img, (config.MODEL.IMAGE_SIZE.H, w_cur, 1))
-
-    img = cv2.resize(img, (168,48))
-    img = np.reshape(img, (48, 168, 3))
+def image_processing(img,device,img_size):
+    img_h,img_w= img_size
+    img = cv2.resize(img, (img_w,img_h))
+    # img = np.reshape(img, (48, 168, 3))
 
     # normalize
     img = img.astype(np.float32)
-    img = (img / 255. - config.DATASET.MEAN) / config.DATASET.STD
+    img = (img / 255. - mean_value) / std_value
     img = img.transpose([2, 0, 1])
     img = torch.from_numpy(img)
 
     img = img.to(device)
     img = img.view(1, *img.size())
+    return img
+
+def get_plate_result(img,device,model,img_size):
+    # img = cv2.imread(image_path)
+    input = image_processing(img,device,img_size)
+    preds = model(input)
+    # print(preds)
+    preds=preds.view(-1).detach().cpu().numpy()
+    newPreds=decodePlate(preds)
+    plate=""
+    for i in newPreds:
+        plate+=plate_chr[int(i)]
+    return plate
+
+def init_model(device,model_path):
+    check_point = torch.load(model_path,map_location=device)
+    model_state=check_point['state_dict']
+    cfg = check_point['cfg']
+    model = myNet_ocr(num_classes=78,export=True,cfg=cfg)        #export  True 用来推理
+    # model =build_lprnet(num_classes=len(plate_chr),export=True)
+    model.load_state_dict(model_state)
+    model.to(device)
     model.eval()
-    preds = model(img)
-
-    _, preds = preds.max(2)
-    preds = preds.transpose(1, 0).contiguous().view(-1)
-
-    preds_size = Variable(torch.IntTensor([preds.size(0)]))
-    sim_pred = converter.decode(preds.data, preds_size.data, raw=False)
-
-    print('results: {0}'.format(sim_pred))
-
-if __name__ == '__main__':
-
-    config, args = parse_arg()
-    # device = torch.device('cuda:0') if torch.cuda.is_available() else torch.device('cpu')
-    device =torch.device('cpu')
-    model = crnn.get_crnn(config).to(device)
-    print('loading pretrained model from {0}'.format(args.checkpoint))
-    checkpoint = torch.load(args.checkpoint,map_location=device)
-    if 'state_dict' in checkpoint.keys():
-        model.load_state_dict(checkpoint['state_dict'])
-    else:
-        model.load_state_dict(checkpoint)
+    return model
     
-    started = time.time()
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--model_path', type=str, default='saved_model/best.pth', help='model.pt path(s)')  
+    parser.add_argument('--image_path', type=str, default='images/test.jpg', help='source') 
+    parser.add_argument('--img_h', type=int, default=48, help='height') 
+    parser.add_argument('--img_w',type=int,default=168,help='width')
+    parser.add_argument('--LPRNet',action='store_true',help='use LPRNet')  #True代表使用LPRNet ,False代表用plateNet
+    parser.add_argument('--acc',type=bool,default='false',help=' get accuracy')  #标记好的图片，计算准确率
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    # device =torch.device("cpu")
+    opt = parser.parse_args()
+    img_size = (opt.img_h,opt.img_w)
+    model = init_model(device,opt.model_path)
+    if os.path.isfile(opt.image_path):   #判断是单张图片还是目录
+        right=0
+        begin = time.time()
+        img = cv_imread(opt.image_path)
+        if img.shape[-1]!=3:
+            img = cv2.cvtColor(img,cv2.COLOR_BGRA2BGR)
+        plate=get_plate_result(img, device,model,img_size)
+        print(plate)
+    elif opt.acc:
+        file_list=[]
+        right=0
+        allFilePath(opt.image_path,file_list)
+        for pic_ in file_list:
+            try:
+                pic_name = os.path.basename(pic_)
+                img = cv_imread(pic_)
+                if img.shape[-1]!=3:
+                    img = cv2.cvtColor(img,cv2.COLOR_BGRA2BGR)
+                plate=get_plate_result(img,device,model,img_size)
+                plate_ori = pic_.split('/')[-1].split('_')[0]
+        # print(plate,"---",plate_ori)
+                if(plate==plate_ori):
 
-    img_raw = cv2.imread(args.image_path)
-    img =img_raw
-    # img = cv2.cvtColor(img_raw, cv2.COLOR_BGR2GRAY)
-    converter = utils.strLabelConverter(config.DATASET.ALPHABETS)
+                    right+=1
+                else:
+                    print(plate_ori,"rec as ---> ",plate,pic_)
+                    # print(plate,pic_name)
+            except:
+                    print("error")
+        print("sum:%d ,right:%d , accuracy: %f"%(len(file_list),right,right/len(file_list)))
+    else:
+            file_list=[]
+            allFilePath(opt.image_path,file_list)
+            for pic_ in file_list:
+                try:
+                    pic_name = os.path.basename(pic_)
+                    img = cv_imread(pic_)
+                    if img.shape[-1]!=3:
+                        img = cv2.cvtColor(img,cv2.COLOR_BGRA2BGR)
+                    plate=get_plate_result(img,device,model)
+                    print(plate,pic_name)
+                except:
+                    print("error")
 
-    recognition(config, img, model, converter, device)
-
-    # cv2.imshow('raw', img_raw)
-    # cv2.waitKey(0)
-
-    finished = time.time()
-    print('elapsed time: {0}'.format(finished - started))
+                
 

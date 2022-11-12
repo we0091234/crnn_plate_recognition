@@ -4,6 +4,7 @@ import numpy as np
 import os
 import shutil
 import argparse
+from alphabets import plate_chr
 def allFileList(rootfile,allFile):
     folder =os.listdir(rootfile)
     for temp in folder:
@@ -26,7 +27,8 @@ if __name__=="__main__":
     rootPath = opt.image_path
     labelFile = opt.label_file
     # palteStr=r"#京沪津渝冀晋蒙辽吉黑苏浙皖闽赣鲁豫鄂湘粤桂琼川贵云藏陕甘青宁新学警港澳挂使领民深危险品0123456789ABCDEFGHJKLMNPQRSTUVWXYZ"
-    palteStr=r"#京沪津渝冀晋蒙辽吉黑苏浙皖闽赣鲁豫鄂湘粤桂琼川贵云藏陕甘青宁新学警港澳挂使领民航深0123456789ABCDEFGHJKLMNPQRSTUVWXYZ"
+    # palteStr=r"#京沪津渝冀晋蒙辽吉黑苏浙皖闽赣鲁豫鄂湘粤桂琼川贵云藏陕甘青宁新学警港澳挂使领民航深0123456789ABCDEFGHJKLMNPQRSTUVWXYZ"
+    palteStr=plate_chr
     print(len(palteStr))
     plateDict ={}
     for i in range(len(list(palteStr))):

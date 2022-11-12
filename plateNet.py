@@ -1,6 +1,6 @@
 import torch.nn as nn
 import torch
-
+import torch.nn.functional as F
 
 class myNet_ocr(nn.Module):
     def __init__(self,cfg=None,num_classes=78,export=False):
@@ -55,14 +55,14 @@ class myNet_ocr(nn.Module):
             assert h == 1, "the height of conv must be 1"
             conv = x.squeeze(2) # b *512 * width
             conv = conv.permute(2, 0, 1)  # [w, b, c]
-            # output = F.log_softmax(self.rnn(conv), dim=2)
-            output = torch.softmax(conv, dim=2)
+            output = F.log_softmax(conv, dim=2)
+            # output = torch.softmax(conv, dim=2)
            
             return output
 
 if __name__ == '__main__':
-    x = torch.randn(1,3,48,168)
-    cfg =[32,'M',64,'M',128,'M',256]
+    x = torch.randn(1,3,24,168)
+    cfg =[32,'M',64,'M',128]
     model = myNet_ocr(num_classes=78,export=True,cfg=cfg)
     # print(model)
     out = model(x)

@@ -9,28 +9,30 @@ import lib.models.crnn as crnn
 import lib.utils.utils as utils
 from lib.dataset import get_dataset
 from lib.core import function
-import lib.config.alphabets as alphabets
 from lib.utils.utils import model_info
+from plateNet import myNet_ocr
+from  alphabets import plateName,plate_chr
+from LPRNet import build_lprnet
 
 from tensorboardX import SummaryWriter
 
-
 def parse_arg():
     parser = argparse.ArgumentParser(description="train crnn")
-
-    parser.add_argument(
-        '--cfg', help='experiment configuration filename', required=True, type=str)
-
+    
+    parser.add_argument('--cfg', help='experiment configuration filename', required=True, type=str)
+    parser.add_argument('--img_h', type=int, default=48, help='height') 
+    parser.add_argument('--img_w',type=int,default=168,help='width')
     args = parser.parse_args()
-
+   
     with open(args.cfg, 'r') as f:
         # config = yaml.load(f, Loader=yaml.FullLoader)
         config = yaml.load(f)
         config = edict(config)
 
-    config.DATASET.ALPHABETS = alphabets.plateName
+    config.DATASET.ALPHABETS = plateName
     config.MODEL.NUM_CLASSES = len(config.DATASET.ALPHABETS)
-
+    config.HEIGHT=args.img_h
+    config.WIDTH = args.img_w
     return config
 
 
@@ -57,7 +59,9 @@ def main():
     # construct face related neural networks
     # cfg =[32,'M',64,'M',128,'M',256]  #small model
     cfg =[32,32,64,64,'M',128,128,'M',196,196,'M',256,256] #big model
-    model = crnn.get_crnn(config,cfg=cfg)
+    # model = crnn.get_crnn(config,cfg=cfg)
+    model = myNet_ocr(num_classes=len(plate_chr),cfg=cfg)
+    # model = build_lprnet(num_classes=len(plate_chr))
 
     # get device
     if torch.cuda.is_available():
@@ -116,7 +120,7 @@ def main():
             model.load_state_dict(checkpoint)
 
     model_info(model)
-    train_dataset = get_dataset(config)(config, is_train=True)
+    train_dataset = get_dataset(config)(config, input_w=config.WIDTH,input_h=config.HEIGHT,is_train=True)
     train_loader = DataLoader(
         dataset=train_dataset,
         batch_size=config.TRAIN.BATCH_SIZE_PER_GPU,
@@ -125,7 +129,7 @@ def main():
         pin_memory=config.PIN_MEMORY,
     )
 
-    val_dataset = get_dataset(config)(config, is_train=False)
+    val_dataset = get_dataset(config)(config,input_w=config.WIDTH,input_h=config.HEIGHT, is_train=False)
     val_loader = DataLoader(
         dataset=val_dataset,
         batch_size=config.TEST.BATCH_SIZE_PER_GPU,

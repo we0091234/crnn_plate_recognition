@@ -3,9 +3,7 @@ from plateNet import myNet_ocr
 import time
 import cv2
 import torch
-from torch.autograd import Variable
 import lib.utils.utils as utils
-import lib.models.crnn as crnn
 import lib.config.alphabets as alphabets
 import yaml
 from easydict import EasyDict as edict
