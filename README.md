@@ -16,7 +16,10 @@
 
 1. 从CCPD和CRPD截下来的车牌小图以及我自己收集的一部分车牌 [dataset](https://pan.baidu.com/s/1xT-F3E5U3ul3o6gu6Zk94g)  提取码：g08q
 2. 数据集打上标签,生成train.txt和val.txt
+
+
    ![Image text](images/tmp2E.png)
+
 
    图片命名如上图：**车牌号_序号.jpg**
    然后执行如下命令，得到train.txt和val.txt
