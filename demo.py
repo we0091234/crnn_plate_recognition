@@ -61,7 +61,7 @@ def init_model(device,model_path):
     check_point = torch.load(model_path,map_location=device)
     model_state=check_point['state_dict']
     cfg = check_point['cfg']
-    model = myNet_ocr(num_classes=78,export=True,cfg=cfg)        #export  True 用来推理
+    model = myNet_ocr(num_classes=len(plate_chr),export=True,cfg=cfg)        #export  True 用来推理
     # model =build_lprnet(num_classes=len(plate_chr),export=True)
     model.load_state_dict(model_state)
     model.to(device)
