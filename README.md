@@ -17,9 +17,7 @@
 1. 从CCPD和CRPD截下来的车牌小图以及我自己收集的一部分车牌 [dataset](https://pan.baidu.com/s/1xT-F3E5U3ul3o6gu6Zk94g)  提取码：g08q
 2. 数据集打上标签,生成train.txt和val.txt
 
-
    ![Image text](images/tmp2E.png)
-
 
    图片命名如上图：**车牌号_序号.jpg**
    然后执行如下命令，得到train.txt和val.txt
@@ -111,6 +109,18 @@ def get_split_merge(img):
 1. 修改alphabets.py，修改成你自己的字符集，plateName,plate_chr都要修改，plate_chr 多了一个空的占位符'#'
 2. 通过plateLabel.py 生成train.txt, val.txt
 3. 训练
+
+## 数据增强
+
+```
+cd Text-Image-Augmentation-python-master
+
+python demo1.py --src_path /mnt/Gu/trainData/test_aug --dst_path /mnt/Gu/trainData/result_aug/
+```
+
+src_path 是数据路径， dst_path是保存的数据路径
+
+**然后把两份数据放到一起进行训练，效果会好很多！**
 
 ## References
 
