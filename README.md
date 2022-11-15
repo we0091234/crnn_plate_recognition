@@ -92,6 +92,8 @@ python onnx_infer.py --onnx_file saved_model/best.onnx  --image_path images/test
 
 双层车牌这里采用拼接成单层车牌的方式：
 
+python:
+
 ```
 def get_split_merge(img):
     h,w,c = img.shape
@@ -100,6 +102,23 @@ def get_split_merge(img):
     img_upper = cv2.resize(img_upper,(img_lower.shape[1],img_lower.shape[0]))
     new_img = np.hstack((img_upper,img_lower))
     return new_img
+```
+
+c++:
+
+```
+cv::Mat get_split_merge(cv::Mat &img)   //双层车牌 分割 拼接
+{
+    cv::Rect  upper_rect_area = cv::Rect(0,0,img.cols,int(5.0/12*img.rows));
+    cv::Rect  lower_rect_area = cv::Rect(0,int(1.0/3*img.rows),img.cols,img.rows-int(1.0/3*img.rows));
+    cv::Mat img_upper = img(upper_rect_area);
+    cv::Mat img_lower =img(lower_rect_area);
+    cv::resize(img_upper,img_upper,img_lower.size());
+    cv::Mat out(img_lower.rows,img_lower.cols+img_upper.cols, CV_8UC3, cv::Scalar(114, 114, 114));
+    img_upper.copyTo(out(cv::Rect(0,0,img_upper.cols,img_upper.rows)));
+    img_lower.copyTo(out(cv::Rect(img_upper.cols,0,img_lower.cols,img_lower.rows)));
+    return out;
+}
 ```
 
 ![Image text](image/tmp55DE.png)  通过变换得到 ![Image text](image/new.jpg)
