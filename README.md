@@ -1,6 +1,6 @@
 # 车牌识别
 
-中文车牌识别系统基于crnn
+中文车牌识别系统基于crnn  车牌检测看这里[车牌检测](https://github.com/we0091234/Chinese_license_plate_detection_recognition)
 
 ## 环境配置
 
