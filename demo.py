@@ -49,6 +49,7 @@ def get_plate_result(img,device,model,img_size):
     # img = cv2.imread(image_path)
     input = image_processing(img,device,img_size)
     preds = model(input)
+    preds =preds.argmax(dim=2)
     # print(preds)
     preds=preds.view(-1).detach().cpu().numpy()
     newPreds=decodePlate(preds)
