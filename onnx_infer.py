@@ -38,8 +38,9 @@ def rec_pre_precessing(img,size=(48,168)): #识别前处理
 def get_plate_result(img,session_rec): #识别后处理
     img =rec_pre_precessing(img)
     y_onnx = session_rec.run([session_rec.get_outputs()[0].name], {session_rec.get_inputs()[0].name: img})[0]
+    index =np.argmax(y_onnx[0],axis=1)
     # print(y_onnx[0])
-    plate_no = decodePlate(y_onnx[0])
+    plate_no = decodePlate(index)
     return plate_no
 
 def allFilePath(rootPath,allFIleList):  #遍历文件
