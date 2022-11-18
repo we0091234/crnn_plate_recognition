@@ -35,7 +35,7 @@ if __name__=="__main__":
                       dynamic_axes={'images': {0: 'batch'},
                                     'output': {0: 'batch'}
                                    } if opt.dynamic else None)
-    print(f"simplify completed,save to {opt.save_path}")                  
+    print(f"convert completed,save to {opt.save_path}")                  
     if opt.simplify:
         from onnxsim import simplify
         print(f"begin simplify ....")
