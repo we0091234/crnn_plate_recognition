@@ -144,3 +144,7 @@ src_path 是数据路径， dst_path是保存的数据路径
 ## References
 
 - https://github.com/meijieru/crnn.pytorch
+
+#### 联系
+
+**有问题可以提issues 或者加qq群:871797331 询问**
