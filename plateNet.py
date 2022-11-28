@@ -61,8 +61,8 @@ class myNet_ocr(nn.Module):
             return output
 
 if __name__ == '__main__':
-    x = torch.randn(1,3,24,168)
-    cfg =[32,'M',64,'M',128]
+    x = torch.randn(1,3,48,168)
+    cfg =[32,'M',64,'M',128,'M',256]
     model = myNet_ocr(num_classes=78,export=True,cfg=cfg)
     # print(model)
     out = model(x)
