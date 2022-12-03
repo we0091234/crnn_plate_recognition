@@ -1,6 +1,24 @@
-# 车牌识别
+# 车[牌]()识别
 
 中文车牌识别系统基于crnn  车牌检测看这里[车牌检测](https://github.com/we0091234/Chinese_license_plate_detection_recognition)
+
+| 模型   | 准确率 | 速度(ms) | 模型大小(MB) | link                                                 |
+| ------ | ------ | -------- | ------------ | ---------------------------------------------------- |
+| small  | 96.82% | 1.2ms    | 0.67         | [ezhe](https://pan.baidu.com/s/1IsQNPSRuW7bXNWc2ULfFLg) |
+| medium | 98.21% | 1.5ms    | 2.5          | [foxg](https://pan.baidu.com/s/1DSoJ-wWymDemf5lE2xCNLw) |
+| big    | 98.46% | 1.6ms    | 7.3          | [ssmx](https://pan.baidu.com/s/1F6Y0AUVnIt4YYWLE4gDrIw) |
+
+训练的时候 选择相应的cfg 即可选择模型的大小
+
+train.py
+
+```
+ # construct face related neural networks
+    #cfg =[8,8,16,16,'M',32,32,'M',48,48,'M',64,128] #medium model
+    # cfg =[16,16,32,32,'M',64,64,'M',96,96,'M',128,256]#medium model
+    cfg =[32,32,64,64,'M',128,128,'M',196,196,'M',256,256] #big model
+    model = myNet_ocr(num_classes=len(plate_chr),cfg=cfg)
+```
 
 ## 环境配置
 
