@@ -14,7 +14,7 @@ class myNet_ocr(nn.Module):
         # self.loc =  nn.MaxPool2d((2, 2), (5, 1), (0, 1),ceil_mode=True)
         # self.loc =  nn.AvgPool2d((2, 2), (5, 2), (0, 1),ceil_mode=False)
         self.loc =  nn.MaxPool2d((5, 2), (1, 1),(0,1),ceil_mode=False)
-        self.newCnn=nn.Conv2d(256,num_classes,1,1)
+        self.newCnn=nn.Conv2d(cfg[-1],num_classes,1,1)
         # self.newBn=nn.BatchNorm2d(num_classes)
     def make_layers(self, cfg, batch_norm=False):
         layers = []
