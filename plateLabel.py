@@ -20,7 +20,7 @@ def is_str_right(plate_name):
     return True
 if __name__=="__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--image_path', type=str, default="/mnt/Gu/trainData/plate/new_git_train/CCPD_CRPD_OTHER_ALL", help='source') 
+    parser.add_argument('--image_path', type=str, default="/mnt/Gu/trainData/plate/new_git_train", help='source') 
     parser.add_argument('--label_file', type=str, default='datasets/train.txt', help='model.pt path(s)')  
     
     opt = parser.parse_args()
@@ -55,3 +55,4 @@ if __name__=="__main__":
         picNum+=1
         # print(jpgFile+labelStr)
         fp.write(jpgFile+labelStr+"\n")
+    fp.close()
