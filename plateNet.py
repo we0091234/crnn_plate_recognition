@@ -50,7 +50,7 @@ class myNet_ocr(nn.Module):
             conv = conv.transpose(2,1)  # [w, b, c]
             if self.trt:
                 conv =conv.argmax(dim=2)
-                out = conv.float()
+                conv = conv.float()
             return conv
         else:
             b, c, h, w = x.size()
