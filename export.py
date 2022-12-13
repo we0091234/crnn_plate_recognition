@@ -14,6 +14,7 @@ if __name__=="__main__":
     parser.add_argument('--batch_size', type=int, default=1, help='batch size')
     parser.add_argument('--dynamic', action='store_true', default=False, help='enable dynamic axis in onnx model')
     parser.add_argument('--simplify', action='store_true', default=False, help='simplified onnx')
+    parser.add_argument('--trt', action='store_true', default=False, help='support trt')
 
 
     
@@ -21,7 +22,7 @@ if __name__=="__main__":
     print(opt)
     checkpoint = torch.load(opt.weights)
     cfg = checkpoint['cfg']
-    model = myNet_ocr(num_classes=len(plate_chr),cfg=cfg,export=True)
+    model = myNet_ocr(num_classes=len(plate_chr),cfg=cfg,export=True,trt=opt.trt)
     model.load_state_dict(checkpoint['state_dict'])
     model.eval()
     

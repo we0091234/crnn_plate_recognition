@@ -100,6 +100,8 @@ python export.py --weights saved_model/best.pth --save_path saved_model/best.onn
 
 导出onnx文件为 saved_model/best.onnx
 
+如果需要onnx支持trt的话，支持[这里推理](https://github.com/we0091234/chinese_plate_tensorrt)，则加上--trt
+
 #### onnx 推理
 
 ```
