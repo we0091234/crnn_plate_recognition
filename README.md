@@ -35,7 +35,7 @@ python demo_plate_color.py --model_path saved_model/plate_rec_color.pth --image_
 
 ```
 
-python export.py --weights saved_model/plate_rec_color.pth saved_model/plate_rec_color.onnx  --simplify
+python export.py --weights saved_model/plate_rec_color.pth --save_path saved_model/plate_rec_color.onnx  --simplify
 
 ```
 
