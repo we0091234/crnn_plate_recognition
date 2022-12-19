@@ -10,6 +10,7 @@ runs/
 build/
 result1/
 output/
+palte_color/
 demoMy.py
 get_every_provice_number.py
 get_train_less_data.py

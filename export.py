@@ -1,5 +1,6 @@
 import argparse
-from plateNet import myNet_ocr
+# from plateNet import myNet_ocr
+from colorNet import myNet_ocr_color
 from alphabets import plate_chr
 import torch
 import onnx
@@ -14,7 +15,6 @@ if __name__=="__main__":
     parser.add_argument('--batch_size', type=int, default=1, help='batch size')
     parser.add_argument('--dynamic', action='store_true', default=False, help='enable dynamic axis in onnx model')
     parser.add_argument('--simplify', action='store_true', default=False, help='simplified onnx')
-    parser.add_argument('--trt', action='store_true', default=False, help='support trt')
 
 
     
@@ -22,7 +22,7 @@ if __name__=="__main__":
     print(opt)
     checkpoint = torch.load(opt.weights)
     cfg = checkpoint['cfg']
-    model = myNet_ocr(num_classes=len(plate_chr),cfg=cfg,export=True,trt=opt.trt)
+    model = myNet_ocr_color(num_classes=len(plate_chr),cfg=cfg,export=True,color_num=5)
     model.load_state_dict(checkpoint['state_dict'])
     model.eval()
     
@@ -30,7 +30,7 @@ if __name__=="__main__":
     onnx_file_name = opt.save_path
     
     torch.onnx.export(model,input,onnx_file_name,
-                      input_names=["images"],output_names=["output"],
+                      input_names=["images"],output_names=["output_1","output_2"],
                       verbose=False,
                       opset_version=11,
                       dynamic_axes={'images': {0: 'batch'},

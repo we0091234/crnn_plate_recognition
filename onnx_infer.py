@@ -13,7 +13,7 @@ def cv_imread(path):   #防止读取中文路径失败
 
 # plateName=r"#京沪津渝冀晋蒙辽吉黑苏浙皖闽赣鲁豫鄂湘粤桂琼川贵云藏陕甘青宁新学警港澳挂使领民航深0123456789ABCDEFGHJKLMNPQRSTUVWXYZ"
 mean_value,std_value=((0.588,0.193))#识别模型均值标准差
-
+plate_color_list=['黑色','蓝色','绿色','白色','黄色']
 def decodePlate(preds):        #识别后处理
     pre=0
     newPreds=[]
@@ -37,11 +37,13 @@ def rec_pre_precessing(img,size=(48,168)): #识别前处理
 
 def get_plate_result(img,session_rec): #识别后处理
     img =rec_pre_precessing(img)
-    y_onnx = session_rec.run([session_rec.get_outputs()[0].name], {session_rec.get_inputs()[0].name: img})[0]
-    index =np.argmax(y_onnx[0],axis=1)
+    y_onnx_plate,y_onnx_color = session_rec.run([session_rec.get_outputs()[0].name,session_rec.get_outputs()[1].name], {session_rec.get_inputs()[0].name: img})
+    index =np.argmax(y_onnx_plate,axis=-1)
+    index_color = np.argmax(y_onnx_color)
+    plate_color = plate_color_list[index_color]
     # print(y_onnx[0])
-    plate_no = decodePlate(index)
-    return plate_no
+    plate_no = decodePlate(index[0])
+    return plate_no,plate_color
 
 def allFilePath(rootPath,allFIleList):  #遍历文件
     fileList = os.listdir(rootPath)
@@ -54,11 +56,10 @@ def allFilePath(rootPath,allFIleList):  #遍历文件
             
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--onnx_file', type=str, default='saved_model/best.onnx', help='model.pt path(s)')#识别模型
+    parser.add_argument('--onnx_file', type=str, default='saved_model/plate_rec_color.onnx', help='model.pt path(s)')#识别模型
     parser.add_argument('--image_path', type=str, default='images', help='source') 
     parser.add_argument('--img_h', type=int, default=48, help='inference size (pixels)')
     parser.add_argument('--img_w', type=int, default=168, help='inference size (pixels)')
-    # parser.add_argument('--output', type=str, default='result1', help='source') 
     opt = parser.parse_args()
     providers =  ['CPUExecutionProvider']
     session_rec = onnxruntime.InferenceSession(opt.onnx_file, providers=providers )
@@ -69,8 +70,8 @@ if __name__ == "__main__":
         img=cv_imread(opt.image_path)
         if img.shape[-1]==4:
             img =cv2.cvtColor(img,cv2.COLOR_BGRA2BGR)
-        plate = get_plate_result(img,session_rec)
-        print(f"{plate} {opt.image_path}")
+        plate ,plate_color= get_plate_result(img,session_rec)
+        print(f"{plate} {plate_color} {opt.image_path}")
     else:
         allFilePath(opt.image_path,file_list)
         for pic_ in file_list:
