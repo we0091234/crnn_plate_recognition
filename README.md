@@ -166,6 +166,7 @@ src_path 是数据路径， dst_path是保存的数据路径
 ## References
 
 - https://github.com/meijieru/crnn.pytorch
+- [https://github.com/Sierkinhane/CRNN_Chinese_Characters_Rec](https://github.com/Sierkinhane/CRNN_Chinese_Characters_Rec)
 
 #### 联系
 
