@@ -73,7 +73,7 @@ train.py
 ## Train
 
 ```angular2html
-   [run] python train.py --cfg lib/config/360CC_config.yaml
+python train.py --cfg lib/config/360CC_config.yaml
 ```
 
 结果保存再output文件夹中
