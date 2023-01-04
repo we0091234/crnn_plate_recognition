@@ -1,8 +1,9 @@
 # 车牌识别
 
+**车牌检测+车牌识别 看这里[车牌检测识别](https://github.com/we0091234/Chinese_license_plate_detection_recognition)**
+
 **车牌颜色和车牌识别一起训练看这里： [车牌识别+车牌颜色](https://github.com/we0091234/crnn_plate_recognition/tree/plate_color)**
 
-中文车牌识别系统基于crnn  车牌检测看这里[车牌检测](https://github.com/we0091234/Chinese_license_plate_detection_recognition)
 
 | 模型   | 准确率 | 速度(ms) | 模型大小(MB) | link                                                 |
 | ------ | ------ | -------- | ------------ | ---------------------------------------------------- |
