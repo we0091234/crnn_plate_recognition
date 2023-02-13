@@ -75,7 +75,7 @@ if __name__ == '__main__':
     parser.add_argument('--image_path', type=str, default='images/test.jpg', help='source') 
     parser.add_argument('--img_h', type=int, default=48, help='height') 
     parser.add_argument('--img_w',type=int,default=168,help='width')
-    parser.add_argument('--LPRNet',action='store_true',help='use LPRNet')  #True代表使用LPRNet ,False代表用plateNet
+    parser.add_argument('--LPRNet',action='store_true',help='use LPRNet')  
     parser.add_argument('--acc',type=bool,default='false',help=' get accuracy')  #标记好的图片，计算准确率
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # device =torch.device("cpu")
