@@ -59,7 +59,7 @@ class _360CC(data.Dataset):
             img=cv2.cvtColor(img,cv2.COLOR_BGRA2BGR)
         # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-        img_h, img_w ,_= img.shape
+        # img_h, img_w ,_= img.shape
 
         # img = cv2.resize(img, (0,0), fx=self.inp_w / img_w, fy=self.inp_h / img_h, interpolation=cv2.INTER_CUBIC)
         img = cv2.resize(img, (self.input_w,self.input_h))

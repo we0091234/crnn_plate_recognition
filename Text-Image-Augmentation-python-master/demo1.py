@@ -27,8 +27,8 @@ def create_gif(image_list, gif_name, duration=0.1):
 
 if __name__ == '__main__':
     parser =argparse.ArgumentParser()
-    parser.add_argument('--src_path', type=str, default='/mnt/Gu/trainData/weixian', help='model.pt path(s)')  
-    parser.add_argument('--dst_path', type=str, default='/mnt/Gu/trainData/plate/final/weixian_aug', help='source') 
+    parser.add_argument('--src_path', type=str, default='/mnt/Gu/trainData/plate/final/git_release/train_huoche/', help='model.pt path(s)')  
+    parser.add_argument('--dst_path', type=str, default='/mnt/Gu/trainData/plate/final/git_release/train_huoche_aug/', help='source') 
     opt = parser.parse_args()
     rootFile = opt.src_path
     saveFile = opt.dst_path
