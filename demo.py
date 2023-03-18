@@ -72,13 +72,15 @@ def init_model(device,model_path):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_path', type=str, default='saved_model/best.pth', help='model.pt path(s)')  
-    parser.add_argument('--image_path', type=str, default='images/test.jpg', help='source') 
+    # parser.add_argument('--image_path', type=str, default='images/tmp6FC6.png', help='source') 
+    # parser.add_argument('--image_path', type=str, default='/mnt/EPan/carPlate/@realTest2_noTraining/realrealTest', help='source') 
+    parser.add_argument('--image_path', type=str, default='/mnt/Gu/trainData/plate/new_git_train/val_verify', help='source') 
     parser.add_argument('--img_h', type=int, default=48, help='height') 
     parser.add_argument('--img_w',type=int,default=168,help='width')
     parser.add_argument('--LPRNet',action='store_true',help='use LPRNet')  #True代表使用LPRNet ,False代表用plateNet
-    parser.add_argument('--acc',type=bool,default='false',help=' get accuracy')  #标记好的图片，计算准确率
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    # device =torch.device("cpu")
+    parser.add_argument('--acc',type=bool,default='True',help=' get accuracy')  #标记好的图片，计算准确率
+    # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device =torch.device("cpu")
     opt = parser.parse_args()
     img_size = (opt.img_h,opt.img_w)
     model = init_model(device,opt.model_path)
@@ -95,7 +97,7 @@ if __name__ == '__main__':
         right=0
         allFilePath(opt.image_path,file_list)
         for pic_ in file_list:
-            try:
+            # try:
                 pic_name = os.path.basename(pic_)
                 img = cv_imread(pic_)
                 if img.shape[-1]!=3:
@@ -109,8 +111,8 @@ if __name__ == '__main__':
                 else:
                     print(plate_ori,"rec as ---> ",plate,pic_)
                     # print(plate,pic_name)
-            except:
-                    print("error")
+            # except:
+            #         print("error")
         print("sum:%d ,right:%d , accuracy: %f"%(len(file_list),right,right/len(file_list)))
     else:
             file_list=[]
