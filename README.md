@@ -4,11 +4,6 @@
 
 **车牌颜色和车牌识别一起训练看这里： [车牌识别+车牌颜色](https://github.com/we0091234/crnn_plate_recognition/tree/plate_color)**
 
-| 模型   | 准确率 | 速度(ms) | 模型大小(MB) | link                                                 |
-| ------ | ------ | -------- | ------------ | ---------------------------------------------------- |
-| small  | 96.82% | 1.2ms    | 0.67         | [ezhe](https://pan.baidu.com/s/1IsQNPSRuW7bXNWc2ULfFLg) |
-| medium | 98.21% | 1.5ms    | 2.5          | [foxg](https://pan.baidu.com/s/1DSoJ-wWymDemf5lE2xCNLw) |
-| big    | 98.46% | 1.6ms    | 7.3          | [ssmx](https://pan.baidu.com/s/1F6Y0AUVnIt4YYWLE4gDrIw) |
 
 训练的时候 选择相应的cfg 即可选择模型的大小
 
