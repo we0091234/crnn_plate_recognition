@@ -12,6 +12,8 @@ result1/
 output/
 palte_color/
 color_model/
+pretrainde_model/
+color_model_small/
 demoMy.py
 get_every_provice_number.py
 get_train_less_data.py
