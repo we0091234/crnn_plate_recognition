@@ -74,8 +74,10 @@ def init_model(device,model_path):
     
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model_path', type=str, default=r'saved_model/plate_rec_color.pth', help='model.pt path(s)')  
-    parser.add_argument('--image_path', type=str, default=r'/mnt/EPan/carPlate/@realTest2_noTraining/realrealTest/', help='source') 
+    parser.add_argument('--model_path', type=str, default=r'pretrainde_model/plate_rec_color.pth', help='model.pt path(s)')  
+    # parser.add_argument('--image_path', type=str, default=r'/mnt/EPan/carPlate/@realTest2_noTraining/realrealTest/', help='source') 
+    parser.add_argument('--image_path', type=str, default=r'/mnt/Gu/trainData/plate/new_git_train/val_verify', help='source') 
+   
     # parser.add_argument('--image_path', type=str, default=r'images', help='source') 
     parser.add_argument('--img_h', type=int, default=48, help='height') 
     parser.add_argument('--img_w',type=int,default=168,help='width')

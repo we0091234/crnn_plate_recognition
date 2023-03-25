@@ -100,7 +100,7 @@ def val(epoch):
 
 if __name__=='__main__':
 	parser = argparse.ArgumentParser()
-	parser.add_argument('--weights',type=str,default='saved_model/plate_rec_small.pth')  #车牌识别模型
+	parser.add_argument('--weights',type=str,default='/mnt/Gpan/Mydata/pytorchPorject/CRNN/crnn_plate_recognition/output/360CC/crnn/2023-01-15-08-55/checkpoints/checkpoint_72_acc_0.9660.pth')  #车牌识别模型
 	parser.add_argument('--train_path',type=str,default='datasets/palte_color/train') #颜色训练集
 	parser.add_argument('--val_path',type=str,default='datasets/palte_color/val')    #颜色验证集
 	parser.add_argument('--num_color', type=int, default=5)       
@@ -109,7 +109,7 @@ if __name__=='__main__':
 	parser.add_argument('--nepoch', type=int, default=120)
 	parser.add_argument('--lr', type=float, default=0.0025)
 	parser.add_argument('--gpu', type=str, default='0')
-	parser.add_argument('--model_path',type=str,default='color_model',help='model_path')
+	parser.add_argument('--model_path',type=str,default='color_model/color_model_0324',help='model_path')
 	opt = parser.parse_args()
    
 	print(opt)
