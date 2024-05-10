@@ -29,7 +29,7 @@ train.py
 
 #### 车牌识别数据集CCPD+CRPD
 
-1. 从CCPD和CRPD截下来的车牌小图以及我自己收集的一部分车牌 有需要的话加qq群获取:823419837
+1. 从CCPD和CRPD截下来的车牌小图以及我自己收集的一部分车牌 有需要的话加vx:we0091234
 2. 数据集打上标签,生成train.txt和val.txt
 
    ![Image text](images/tmp2E.png)
